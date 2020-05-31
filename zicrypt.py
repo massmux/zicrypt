@@ -79,8 +79,8 @@ elif inMode=='decrypt':
             status = gpg.decrypt_file(f, passphrase=config['passphrase'],output=oFileName )
             print("file: %s\nstatus: %s\nstderr: %s\n" % (f.name,status.status,status.stderr) )
 
-
 else:
-    print(ERR_SOURCE_NOTPRESENT)
+    print(ERR_NOTSUPPORTED)
     sys.exit()
+
 
