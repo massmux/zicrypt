@@ -3,7 +3,7 @@
 
 #   Copyright (C) 2019-2020 Denali Sàrl www.denali.swiss, Massimo Musumeci, @massmux
 #
-#   This script encrypts file by file, all items found and rebuilds directory structure
+#   This script encrypts/descrypts file by file, all items found and rebuilds directory structure
 #
 #   It is subject to the license terms in the LICENSE file found in the top-level
 #   directory of this distribution.
@@ -25,7 +25,7 @@
 import os,sys
 import gnupg
 from pathlib import Path
-from zilib import ls_files
+from zilib import *
 from config import config
 import argparse
 
@@ -39,16 +39,20 @@ args = parser.parse_args()
 (inSource,inDest,inMode)=(args.source,args.destination,args.mode)
 inDest=inDest+"/"
 
+#ERR_NOTSUPPORTED="error: mode not supported or invalid"
+#ERR_SOURCE_NOTPRESENT="error: source dir invalid or not present"
+
+
 """encrypt or decrypt mode"""
 if inMode not in ['encrypt','decrypt']:
-    print("error: mode not supported or invalid")
+    print(ERR_NOTSUPPORTED)
     sys.exit()
 
 """check source dir"""
 try:
     files_dir=ls_files(inSource)
 except:
-    print("error: source dir invalid or not present")
+    print(ERR_SOURCE_NOTPRESENT)
     sys.exit()
 
 # init gpg
@@ -74,4 +78,9 @@ elif inMode=='decrypt':
             oFileName=os.path.splitext(inDest+files_dir[files_dir.index(x)] )[0]
             status = gpg.decrypt_file(f, passphrase=config['passphrase'],output=oFileName )
             print("file: %s\nstatus: %s\nstderr: %s\n" % (f.name,status.status,status.stderr) )
+
+
+else:
+    print(ERR_SOURCE_NOTPRESENT)
+    sys.exit()
 
