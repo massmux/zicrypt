@@ -2,3 +2,4 @@ used
 encrypted
 decrypted
 startfiles
+*.pyc
