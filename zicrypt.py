@@ -22,7 +22,6 @@
 #   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 
 
-
 import os,sys
 import gnupg
 from pathlib import Path
@@ -32,33 +31,47 @@ import argparse
 
 
 """ parsing arguments """
-parser = argparse.ArgumentParser("encrypt.py")
+parser = argparse.ArgumentParser("zicrypt.py")
+parser.add_argument("-m","--mode", help="mode encrypt|decrypt", type=str, required=True)
 parser.add_argument("-s","--source", help="The source directory to process", type=str, required=True)
 parser.add_argument("-d","--destination", help="The destination directory for processed files", type=str, required=True)
 args = parser.parse_args()
-(inSource,inDest)=(args.source,args.destination)
+(inSource,inDest,inMode)=(args.source,args.destination,args.mode)
 inDest=inDest+"/"
 
+"""encrypt or decrypt mode"""
+if inMode not in ['encrypt','decrypt']:
+    print("error: mode not supported or invalid")
+    sys.exit()
+
+"""check source dir"""
 try:
-    #os.path.isdir(inSource)
     files_dir=ls_files(inSource)
 except:
     print("error: source dir invalid or not present")
     sys.exit()
 
-# create dir
-print(os.makedirs( inDest, exist_ok=True))
-
 # init gpg
 gpg = gnupg.GPG(gnupghome=config['gpghome'])
 
-# encrypting files
-for x in files_dir:
-    with open(x, "rb") as f:
-        os.makedirs( Path(inDest+files_dir[files_dir.index(x)]).parent, exist_ok=True)
-        status = gpg.encrypt_file(f,recipients=[config['gpgrecipient']],output= inDest+files_dir[files_dir.index(x)]+".gpg")
-        print("file: ", f.name)
-        print("ok: ", status.ok)
-        print("status: ", status.status)
-        print("stderr: ", status.stderr)
+# create dir
+os.makedirs( inDest, exist_ok=True)
+
+if inMode=='encrypt':
+    # encrypting files
+    for x in files_dir:
+        with open(x, "rb") as f:
+            os.makedirs( Path(inDest+files_dir[files_dir.index(x)]).parent, exist_ok=True)
+            status = gpg.encrypt_file(f,recipients=[config['gpgrecipient']],output= inDest+files_dir[files_dir.index(x)]+".gpg")
+            print("file: %s\nstatus: %s\nstderr: %s\n" % (f.name,status.status,status.stderr) )
+
+
+elif inMode=='decrypt':
+    # decrypting files
+    for x in files_dir:
+        with open(x, "rb") as f:
+            os.makedirs( Path(inDest+files_dir[files_dir.index(x)]).parent, exist_ok=True)
+            oFileName=os.path.splitext(inDest+files_dir[files_dir.index(x)] )[0]
+            status = gpg.decrypt_file(f, passphrase=config['passphrase'],output=oFileName )
+            print("file: %s\nstatus: %s\nstderr: %s\n" % (f.name,status.status,status.stderr) )
 

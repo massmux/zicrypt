@@ -3,4 +3,4 @@ encrypted
 decrypted
 startfiles
 *.pyc
-__pycache__
+__*

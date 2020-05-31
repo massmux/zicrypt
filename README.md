@@ -5,13 +5,14 @@
 
  Source and destination dirs are expressed as relative to local path. The destination dir is created and all the files are placed there with the same tree structure they had in the source directory. No file is ever deleted.
 
- syntax (encryption)
+ syntax
 
 ```
-usage: encrypt.py [-h] -s SOURCE -d DESTINATION
+usage: zicrypt.py [-h] -m MODE -s SOURCE -d DESTINATION
 
 optional arguments:
   -h, --help            show this help message and exit
+  -m MODE, --mode MODE  mode encrypt|decrypt
   -s SOURCE, --source SOURCE
                         The source directory to process
   -d DESTINATION, --destination DESTINATION
@@ -19,16 +20,3 @@ optional arguments:
 
 ```
 
- syntax (decryption)
-
-```
-usage: decrypt.py [-h] -s SOURCE -d DESTINATION
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -s SOURCE, --source SOURCE
-                        The source directory to process
-  -d DESTINATION, --destination DESTINATION
-                        The destination directory for processed files
-
-```
