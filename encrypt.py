@@ -7,13 +7,14 @@ from pathlib import Path
 from zilib import ls_files
 from config import config
 
-
-gpg = gnupg.GPG(gnupghome=config['gpghome'])
-
+# create dir
 os.makedirs( config['encrypted'], exist_ok=True)
 
-files_dir=ls_files(config['toencrypt'])
+# init gpg
+gpg = gnupg.GPG(gnupghome=config['gpghome'])
 
+# encrypting files
+files_dir=ls_files(config['toencrypt'])
 for x in files_dir:
     with open(x, "rb") as f:
         os.makedirs( Path(config['encrypted']+files_dir[files_dir.index(x)]).parent, exist_ok=True)
