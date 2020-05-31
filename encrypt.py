@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import os,sys
-##import fs
 import gnupg
 from pathlib import Path
 from zilib import ls_files

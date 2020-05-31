@@ -1,9 +1,8 @@
 
 
 config={    "gpghome": "/home/massmux/.gnupg",
-            "gpgrecipient":"go@massmux.com",
-            "decrypted": "decrypted/",
-            "todecrypt":"./encrypted/"
+            "passphrase":"123456",
+            "gpgrecipient":"go@massmux.com"
             }
 
 
