@@ -3,7 +3,7 @@
 
 #   Copyright (C) 2019-2020 Denali Sàrl www.denali.swiss, Massimo Musumeci, @massmux
 #
-#   This script encrypts file by files, all items found and rebuilds directory structure
+#   This script encrypts file by file, all items found and rebuilds directory structure
 #
 #   It is subject to the license terms in the LICENSE file found in the top-level
 #   directory of this distribution.
