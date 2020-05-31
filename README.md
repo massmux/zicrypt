@@ -2,4 +2,4 @@
 gpg recursive folders encryptor suitable to be used with cloud storage services!
 
 
- NB: still in embional stage, do not use
+ NB: still in embrional stage, do not use
