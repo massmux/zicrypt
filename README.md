@@ -5,6 +5,22 @@
 
  Source and destination dirs are expressed as relative to local path. The destination dir is created and all the files are placed there with the same tree structure they had in the source directory. No file is ever deleted.
 
+ Os requirement. GPG installed on the computer. It is also obvious that an rsa key must be created in order to work with this script. To install gnupg, just run the command
+
+```
+ apt-get install gnupg2 
+```
+
+
+ python lib requirements
+
+```
+pip3 install gnupg
+pip3 install pathlib
+pip3 install argparse
+```
+
+
  syntax
 
 ```
