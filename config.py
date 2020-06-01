@@ -25,7 +25,9 @@
 
 config={    "gpghome": "/home/massmux/.gnupg",
             "passphrase":"123456",
-            "gpgrecipient":"go@massmux.com"
+            "gpgrecipient":"go@massmux.com",
+            "exclude": ['.zip','.tgz'],
+            "gpgextension":".gpg"
             }
 
 

@@ -3,7 +3,7 @@
 
 #   Copyright (C) 2019-2020 Denali Sàrl www.denali.swiss, Massimo Musumeci, @massmux
 #
-#   This script encrypts/descrypts file by file, all items found and rebuilds directory structure
+#   This script encrypts/decrypts file by file, all items found and rebuilds directory structure
 #
 #   It is subject to the license terms in the LICENSE file found in the top-level
 #   directory of this distribution.
@@ -39,9 +39,6 @@ args = parser.parse_args()
 (inSource,inDest,inMode)=(args.source,args.destination,args.mode)
 inDest=inDest+"/"
 
-#ERR_NOTSUPPORTED="error: mode not supported or invalid"
-#ERR_SOURCE_NOTPRESENT="error: source dir invalid or not present"
-
 
 """encrypt or decrypt mode"""
 if inMode not in ['encrypt','decrypt']:
@@ -65,9 +62,11 @@ if inMode=='encrypt':
     # encrypting files
     for x in files_dir:
         with open(x, "rb") as f:
-            os.makedirs( Path(inDest+files_dir[files_dir.index(x)]).parent, exist_ok=True)
-            status = gpg.encrypt_file(f,recipients=[config['gpgrecipient']],output= inDest+files_dir[files_dir.index(x)]+".gpg")
-            print("file: %s\nstatus: %s\nstderr: %s\n" % (f.name,status.status,status.stderr) )
+            file_name, file_ext = os.path.splitext(f.name)
+            if file_ext not in config['exclude']:
+               os.makedirs( Path(inDest+files_dir[files_dir.index(x)]).parent, exist_ok=True)
+               status = gpg.encrypt_file(f,recipients=[config['gpgrecipient']],output= inDest+files_dir[files_dir.index(x)]+config['gpgextension'])
+               print("file: %s\nstatus: %s\nstderr: %s\n" % (f.name,status.status,status.stderr) )
 
 
 elif inMode=='decrypt':
