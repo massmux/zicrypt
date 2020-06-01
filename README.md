@@ -36,3 +36,6 @@ optional arguments:
 
 ```
 
+
+ My youtube channel: http://www.youtube.com/c/MassimoSMusumeci and also at the telegram group with discussions about privacy and security: https://t.me/BitcoinSecPriv
+
