@@ -22,9 +22,9 @@
 #   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 
 
-import os,sys
+import os,sys,shutil
 import gnupg
-from pathlib import Path
+from pathlib import Path,PurePath
 from zilib import *
 from config import config
 import argparse
@@ -58,6 +58,13 @@ gpg = gnupg.GPG(gnupghome=config['gpghome'])
 # create dir
 os.makedirs( inDest, exist_ok=True)
 
+# analyze paths
+(abs_source,abs_dest,souceName,destName) = (    os.path.dirname(os.path.realpath(inSource)),
+                                                os.path.dirname(os.path.realpath(inDest)),
+                                                PurePath(inSource).name, 
+                                                PurePath(inDest).name 
+                                                )
+
 if inMode=='encrypt':
     # encrypting files
     for x in files_dir:
@@ -68,6 +75,15 @@ if inMode=='encrypt':
                status = gpg.encrypt_file(f,recipients=[config['gpgrecipient']],output= inDest+files_dir[files_dir.index(x)]+config['gpgextension'])
                print("file: %s\nstatus: %s\nstderr: %s\n" % (f.name,status.status,status.stderr) )
 
+    try:
+        shutil.move( abs_dest+"/"+destName+"/"+inSource, abs_dest+"/"+destName)
+        if PurePath(inSource).parts[0] in ['/','.','..']:
+            shutil.rmtree((abs_dest+"/"+destName+"/"+PurePath(inSource).parts[1] ))
+        else:
+            shutil.rmtree((abs_dest+"/"+destName+"/"+PurePath(inSource).parts[0] ))
+    except:
+        pass
+
 
 elif inMode=='decrypt':
     # decrypting files
@@ -77,6 +93,16 @@ elif inMode=='decrypt':
             oFileName=os.path.splitext(inDest+files_dir[files_dir.index(x)] )[0]
             status = gpg.decrypt_file(f, passphrase=config['passphrase'],output=oFileName )
             print("file: %s\nstatus: %s\nstderr: %s\n" % (f.name,status.status,status.stderr) )
+
+    try:
+        shutil.move( abs_dest+"/"+destName+"/"+inSource, abs_dest+"/"+destName)
+        if PurePath(inSource).parts[0] in ['/','.','..']:
+            shutil.rmtree((abs_dest+"/"+destName+"/"+PurePath(inSource).parts[1] ))
+        else:
+            shutil.rmtree((abs_dest+"/"+destName+"/"+PurePath(inSource).parts[0] ))
+    except:
+        pass
+    
 
 else:
     print(ERR_NOTSUPPORTED)
